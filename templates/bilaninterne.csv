@@ -1,0 +1,136 @@
+Linetype,Rubrique,Code,Montant,Ventilation
+0,ACTIF,,,
+1,ACTIFS IMMOBILISES ,20/28 ,<<$S1>>,no
+2,I Frais d'établissement,20,<<$C20>>,yes
+2,"II Immobilisations incorporelles (annexe I, A)",21,<<$C21>>,yes
+2,"III Immobilisations corporelles (ann I, B) ",22/27  ,<<$S2>>,no
+3,A Terrains et constructions ,22,<<$C22>>,yes
+3,"B Installations, machines et outillage ",23,<<$C23>>,yes
+3,C Mobilier et matériel roulant ,24,<<$C24>>,no
+4,0 Matériel de bureau,240,<<$C240>>,yes
+4,1 Matériel roulant,241,<<$C241>>,yes
+4,2 Matériel informatique,242,<<$C242>>,yes
+4,4 Autres mobilier,243/249,<<$S243>>,yes
+3,D Location-financement et droits similaires ,25,<<$C25>>,yes
+3,E Autres immobilisations corporelles ,26,<<$C26>>,yes
+3,F Immobilisations en cours et acomptes versés ,27,<<$C27>>,yes
+2,"IV Immobilisations financières (ann I, C et II) ",28,<<$C28>>,yes
+1,ACTIFS CIRCULANTS ,29/58,<<$S3>>,no
+2,V Créances à plus d'un an ,29,<<$C29>>,no
+3,A Créances commerciales ,290,<<$C290>>,yes
+3,B Autres créances ,291,<<$C291>>,yes
+2,VI Stocks et commandes en cours d'exécution ,3,<<$C3>>,no
+3,A Stocks ,30/36 ,<<$S4>>,yes
+3,B Commandes en cours d'exécution ,37,<<$C37>>,yes
+2,VII Créances à un an au plus,40/41  ,<<$S5>>,no
+3,A Créances commerciales ,40,<<$C40>>,yes
+3,B Autres créances ,41,<<$C41>>,yes
+2,VIII Placements de trésorerie (ann II) ,50/53  ,<<$S6>>,yes
+2,IX Valeurs disponibles ,55/58 ,<<$S7>>  ,yes
+2,X Comptes de régularisation  ,490/1  ,<<$S8>>,no
+3,A Charges à reporter,490,<<$C490>>,yes
+3,B Produits acquis,491,<<$C491>>,yes
+1,TOTAL DE L'ACTIF ,20/58,<<$S9>>,no
+,,,,
+0,PASSIF,,,
+1,CAPITAUX PROPRES ,10/15  ,<<$S10>>,no
+2,I Capital (ann III) ,10,<<$C10>>,no
+3,A Capital souscrit ,100,<<$C100>>,yes
+3,B Capital non appelé (-) ,101,(<<$C101>>),yes
+2,II Primes d'émission,11,<<$C11>>,yes
+2,III Plus-values de réévaluation ,12,<<$C12>>,yes
+2,IV Réserves ,13,<<$C13>>,no
+3,A Réserve légale ,130,<<$C130>>,yes
+3,B Réserves indisponibles ,131,<<$C131>>,no
+4,1 Pour actions propres ,1310,<<$C1310>>,yes
+4,2 Autres ,1311,<<$C1311>>,yes
+3,C Réserves immunisées,132,<<$C132>>,yes
+3,D Réserves disponibles ,133,<<$C133>>,yes
+2,V Bénéfice reporté ,140,<<$C140>>,yes
+2,Perte reportée (-) ,141,( <<$C141>>) ,yes
+2,VI Subsides en capital ,15,<<$C15>>,yes
+1,PROVISIONS ET IMPÔTS DIFFERES ,16,<<$C16>>,no
+2,VII A Provisions pour risques et charges (ann IV) ,160/5  ,<<$S11>>,yes
+3,B Impôts différés ,168,<<$C168>>,yes
+1,DETTES ,17/49 ,<<$S12>>,no
+2,VIII Dettes à plus d'un an (ann V),17,<<$C17>>,no
+3,A Dettes financières ,170/4 ,<<$S13>> ,no
+4,"1 Etablissements de crédit,  dettes de locationfinancement et assimilées ",172/3 ,<<$S14>>,yes
+4,2 Autres emprunts ,174/0,<<$C174>>,yes
+3,B Dettes commerciales ,175,<<$C175>>,yes
+3,C Acomptes reçus sur commandes ,176,<<$C176>>,yes
+3,D Autres dettes ,178/9,<<$S15>>,yes
+2,IX Dettes à un an au plus (ann V) ,42/48  ,<<$S16>>,no
+3,A Dettes à plus d'un an échéant dans l'année ,42,<<$C42>>,yes
+3,B Dettes financières ,43,<<$C43>>,no
+4,1 Etablissements de crédit ,430/8 ,<<$S17>>,yes
+4,2 Autres emprunts ,439,<<$C439>>,yes
+3,C Dettes commerciales ,44,<<$C44>>,no
+4,1 Fournisseurs ,440/4 ,<<$S18>>,yes
+4,2 Effets à payer ,441,<<$C441>>,yes
+3,D Acomptes reçus sur commandes ,46,<<$C46>>,yes
+3,"E Dettes fiscales, salariales et sociales ",45,<<$C45>>,no
+4,1 Impôts ,450/3 ,<<$S19>>,yes
+4,2 Rémunérations et charges sociales ,454/9 ,<<$S20>> ,yes
+3,F Autres dettes ,47/48 ,<<$S21>>,yes
+2,X Comptes de régularisation,492/3  ,<<$S22>>,yes
+3,A Charges à imputer,492,<<$C492>>,yes
+3,B Produits à reporter,493,<<$C493>>,yes
+1,TOTAL DU PASSIF ,10/49,<<$S23>>,no
+,,,,
+0,COMPTE DE RESULTATS,,,
+1,I Produits et charges d'exploitation,,,
+2,Chiffre d'affaires  ,70,<<$C70>>,yes
+2,Dons et subsides,73,<<$C73>>,yes
+2,Autrs produits d'exploitation,74,<<$C74>>,yes
+2,"Approvisionnements, marchandises; ",60,<<$C60>>,yes
+2,Services et biens divers,61,<<$C61>>,yes
+2,"Approvisionnements, marchandises, services et biens divers",60/61,<<$S24>>,no
+3,A.B. Marge brute d'exploitation (solde positif) ,70/61 ,<<$S25>>,no
+3,        Marge brute d'exploitation (solde négatif) (-) ,61/70 ,(<<$S26>>),no
+3,"C Rémunérations, charges sociales et pensions",62,<<$C62>>,yes
+3,"D Amortissements et réductions de valeur sur frais d'établissement, sur immobilisations incorporelles et corporelles (-)",630,<<$C630>>,yes
+3,"E Réductions de valeur sur stocks, sur commandes en cours d'exécution et sur créances commerciales (dotations -, reprises + ) ",631/4,<<$S27>>,yes
+3,"F Provisions pour risques et charges (dotations -,utilisations et reprises +) ",635/7,<<$S28>>,yes
+3,G Autres charges d'exploitation (-) ,640/8 ,(<<$S29>>),yes
+3,H Charges d'exploitation portées à l'actif au titre de frais de restructuration (+),649,<<$C649>>,yes
+2,Bénéfice d'exploitation (+),70/64,<<$S30>>,no
+2,Perte d'exploitation (-) ,64/70 ,(<<$S31>>),no
+1,II Produits financiers ,75,<<$C75>>,yes
+1,   Charges financières (-) ,65,<<$C65>>,yes
+2,Bénéfice courant avant impôts (+),70/65,<<$S32>>,no
+2,Perte courante avant impôts (-),65/70,(<<$S33>>),no
+1,III Produits exceptionnels,76,<<$C76>>,yes
+1,Charges exceptionnelles (-) ,66,<<$C66>>,yes
+1,Bénéfice de l'exercice avant impôts (+),70/66,<<$S34>>,no
+1,Perte de l'exercice avant impôts (-),66/70,(<<$S35>>),no
+1,IIIbis Prélèvements sur les impôts différés (+) ,780,<<$C780>>,yes
+1,Transferts aux impôts différés (-) ,680,(<<$C680>>),yes
+1,IV Impôts sur le résultat (-) (+) ,67/77,<<$S38>>,no
+2,Impôts sur le résultat,67,<<$C67>>,yes
+2,Régularisations d'impôts et reprises de provisions fiscales,77,<<$C77>>,yes
+1,Bénéfice de l'exercice (+) ,70/67,<<$S36>>,no
+1,Perte de l'exercice (-) ,67/70,(<<$S37>>),no
+1,V Prélèvements sur les réserves immunisées (+) ,789,<<$C789>>,yes
+1,   Transferts aux réserves immunisées (-) ,689,<<$C689>>,yes
+1,Bénéfice de l'exercice à affecter (+),70/68,<<$S39>>,no
+1,Perte de l'exercice à affecter (-) ,68/70,(<<$S40>>),no
+0,AFFECTATIONS ET PRELEVEMENTS,,,
+2,A Bénéfice à affecter,70/69,<<$S44>>,no
+2,    Perte à affecter (-) ,69/70 ,(<<$S45>>),no
+3,1 Bénéfice de l'exercice à affecter ,70/68 ,<<$S39>>,no
+3,   Perte de l'exercice à affecter (-) ,68/70,(<<$S40>>),no
+3,2 Bénéfice reporté de l' exercice précédent ,790,<<$C790>>,no
+3,   Perte reportée de l'  exercice précédent (-) ,690,(<<$C690>>),no
+2,B Prélèvements sur les capitaux propres  ,791/2 ,<<$S41>>,no
+2,C Affectations aux capitaux propres (-) ,691/2,(<<$S42>>),no
+3,1 au capital et aux primes d'émission ,691,<<$C691>>,no
+3,2 à la réserve légale ,6920,<<$C6920>>,no
+3,3 aux autres réserves ,6921,<<$C6921>>,no
+2,D 1 Bénéfice à reporter (-) ,693,(<<$C693>>),no
+2,    2 Perte à reporter ,793,<<$C793>>,no
+2,E Intervention d'associés (ou du propriétaire) dans la perte ,794,<<$C794>>,no
+2,F Bénéfice à distribuer (-) ,694/6,(<<$S43>>),no
+3,1 Rémunération du capital ,694,<<$C694>>,no
+3,2 Administrateurs ou gérants ,695,<<$C695>>,no
+3,3 Autres allocataires ,696,<<$C696>>,no
