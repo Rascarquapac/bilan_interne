@@ -115,7 +115,7 @@ class row_descriptor
         return($code_ranges);
     }
     
-    function get_code_ranges($code)
+    function code_ranges($code)
     {
         if ($code == '') {
             $code_ranges  = [];
@@ -136,7 +136,7 @@ class row_descriptor
         }
         return ($code_ranges);
     }
-    function get_linetype($code_ranges)
+    function linetype($code_ranges)
     {
         $count = count($code_ranges);
         if     ($count === 0) {return("tittle");}
@@ -144,7 +144,7 @@ class row_descriptor
         elseif ($code_ranges[0]["left"] === $code_ranges[0]["right"])  {return("parent");}
         else {return ("combined");}
     }
-    function get_variable_name($linetype,$variable_form)
+    function variable_name($linetype,$variable_form)
     {
         if ($linetype === "tittle")
         {
@@ -167,10 +167,16 @@ class row_descriptor
     
     function get_bilan_row()
     {
-        $this->code_ranges = $this->get_code_ranges($this->code);
-        $this->linetype = $this->get_linetype($this->code_ranges);
-        $this->variable_name = $this->get_variable_name($this->linetype,$this->variable_form);
-        $this->solde=0.0;
-        return;    
+        $bilan_row =[];
+        $this->code_ranges = $this->code_ranges($this->code);
+        $linetype= $this->linetype($this->code_ranges);
+        $this->variable_name = $this->variable_name($linetype,$this->variable_form);
+        $bilan_row ['linestyle'] =$this->linestyle;
+        $bilan_row ['linetype'] =$linetype;
+        $bilan_row ['label'] =$this->label;
+        $bilan_row ['poste'] =$this->code;
+        $bilan_row ['solde'] = 0.0;
+        
+        return($bilan_row);    
     }
 }
