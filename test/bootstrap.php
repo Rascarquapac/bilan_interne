@@ -10,4 +10,6 @@
     // Register the directory to your include files
     AutoLoader::registerDirectory('/Applications/Noalyss/apps/noalyss/htdocs/include/class');
     AutoLoader::registerDirectory('/Applications/Noalyss/apps/noalyss/htdocs/include/database');
+    AutoLoader::registerDirectory('/Applications/Noalyss/apps/noalyss/htdocs/include/lib');
     AutoLoader::registerDirectory('/Applications/Noalyss/apps/noalyss/htdocs/include');
+    
