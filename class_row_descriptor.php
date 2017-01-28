@@ -38,31 +38,17 @@ require_once NOALYSS_INCLUDE.'/class/class_acc_bilan.php';
  */
 class row_descriptor
 {
-    public $csv_row   = [];
-    private $bilan_row = [];
+    public $linestyle   = 0;
+    public $label       = "";
+    public $code        = "";
+    public $code_ranges =[];
+    public $variable_form = "";
+    public $variable_name = "";
+    public $flatten = false;
+    public $solde =0.0;
+
     function __construct() 
     {
-        $linestyle = 0;
-        $label = "";
-        $code  = "";
-        $variable_form = "";
-        $flatten = false;
-        $montant =0.0;
-        $csv_row = [
-            "linestyle" => 0,
-            "rubrique"  => "",
-            "code"      => "",
-            "variable"  => "",
-            "flatten"   => false
-        ];
-        $bilan_row = [
-                    "linestyle"   => 0,
-                    "linetype"    => "",
-                    "label"       =>"",
-                    "poste"       => "",
-                    "montant"     => 0.00 ];
-        $bilan_table =[];
-
     }
     /*!
     * \brief Checks line consistency of csv row (file "bilaninterne.csv")
@@ -100,19 +86,17 @@ class row_descriptor
         //first field must be a number or abort
         if (!is_numeric($linestyle)) {throw new Exception(_('Le style de ligne doit être un nombre'));}
         
-        $this->csv_row = [   
-            "linestyle" => intval($linestyle),
-            "rubrique"  => $rubrique,
-            "code"      => $code,
-            "variable"  => $variable,
-            "flatten"   => ($flatten == 'yes') ? true : false];
+        $this->linestyle     = intval($linestyle);
+        $this->label         = $rubrique;
+        $this->code          = $code;
+        $this->variable_form = $variable;
+        $this->flatten       = ($flatten == 'yes') ? true : false;
         return(true);
     }
                 //BUILDING LEFT POSTE IS MORE SOPHISTICATED : ex: 172/3 !! exceptions !!
                 // Normal building of left range from combined code ex: 172/3
     function composed_ranges($code_left,$code_right)
     {
-        $code_ranges  = [];
         $base_length= strlen($code_left)-strlen($code_right);
         $code_right = substr($code_left,0,$base_length).$code_right;
         $code_ranges = [['left' => $code_left,'right' => $code_right]];
@@ -131,7 +115,7 @@ class row_descriptor
         return($code_ranges);
     }
     
-    function code_ranges($code)
+    function get_code_ranges($code)
     {
         if ($code == '') {
             $code_ranges  = [];
@@ -152,7 +136,7 @@ class row_descriptor
         }
         return ($code_ranges);
     }
-    function linetype($code_ranges)
+    function get_linetype($code_ranges)
     {
         $count = count($code_ranges);
         if     ($count === 0) {return("tittle");}
@@ -160,7 +144,7 @@ class row_descriptor
         elseif ($code_ranges[0]["left"] === $code_ranges[0]["right"])  {return("parent");}
         else {return ("combined");}
     }
-    function variable_name($linetype,$variable_string)
+    function get_variable_name($linetype,$variable_form)
     {
         if ($linetype === "tittle")
         {
@@ -170,7 +154,7 @@ class row_descriptor
         {
             $pattern="/<<\\$([a-zA-Z]*[0-9]*)>>/";
             $matches=[];
-            if (preg_match($pattern,$variable_string,$matches,0)>0){
+            if (preg_match($pattern,$variable_form,$matches,0)>0){
                 //match found, framing characters ignored
                 $variable_name = $matches[1];
             }
@@ -181,21 +165,12 @@ class row_descriptor
         return($variable_name);
     }
     
-    function get_code_ranges($csv_row)
-    {
-        return ($this->code_ranges($csv_row->code));
-    }
     function get_bilan_row()
     {
-        $this->bilan_row["linestyle"]=$this->csv_row["linestyle"];
-        $code_ranges = $this->code_ranges($this->csv_row["code"]);
-        $linetype = $this->linetype($code_ranges);
-        $this->bilan_row["linetype"]=$linetype;
-        $this->bilan_row["label"]=$this->csv_row["rubrique"];
-        $this->bilan_row["poste"]=$this->csv_row["code"];
-        $this->bilan_row["variable"]=$this->variable_name($linetype,$this->csv_row["variable"]);
-        $this->bilan_row["solde"]=0.0;
-        //$csv_table[]=$this->ext_csv;
-        return($this->bilan_row);    
+        $this->code_ranges = $this->get_code_ranges($this->code);
+        $this->linetype = $this->get_linetype($this->code_ranges);
+        $this->variable_name = $this->get_variable_name($this->linetype,$this->variable_form);
+        $this->solde=0.0;
+        return;    
     }
 }
