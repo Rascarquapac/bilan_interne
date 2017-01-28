@@ -46,21 +46,21 @@ class row_descriptorTest extends PHPUnit_Framework_TestCase {
      * @covers row_descriptor::code_ranges
      * @todo   Implement testCode_ranges().
      */
-    public function testGet_code_ranges() {
+    public function testCode_ranges() {
         $descriptor= new row_descriptor;
         $expected = [['left'=> '20', 'right'=>'20']];
-        $this->assertEquals($descriptor->get_code_ranges('20'),$expected);
+        $this->assertEquals($descriptor->code_ranges('20'),$expected);
         $expected1 = [['left'=> '20', 'right'=>'24']];
-        $this->assertEquals($descriptor->get_code_ranges('20/24'),$expected1);
+        $this->assertEquals($descriptor->code_ranges('20/24'),$expected1);
     }
 
     /**
      * @covers row_descriptor::variable_name
      * @todo   Implement testVariable_name().
      */
-    public function testGet_variable_name() {
+    public function testVariable_name() {
         $descriptor= new row_descriptor;
-        $result =$descriptor->get_variable_name('parent',"<<\$C20>>");
+        $result =$descriptor->variable_name('parent',"<<\$C20>>");
         $this->assertEquals($result,"C20");
     }
 
@@ -70,14 +70,15 @@ class row_descriptorTest extends PHPUnit_Framework_TestCase {
      */
     public function testGet_bilan_row() {
         $row = ["2","I Frais d'établissement","20","<<\$C20>>","yes"];
-        $expected=[2,'parent', "I Frais d'établissement",'20','C20',0.0];        
+        $expected=[
+            'linestyle' =>2,
+            'linetype' =>'parent', 
+            'label' => "I Frais d'établissement",
+            'poste' =>'20',
+            'solde'  => 0.0];        
         $descriptor= new row_descriptor;
         $this->assertTrue($descriptor->check_consistency($row, 3));
-        $descriptor->get_bilan_row();
-        $this->assertEquals($expected,[$descriptor->linestyle,$descriptor->linetype,
-                $descriptor->label,$descriptor->code,
-                $descriptor->variable_name, $descriptor->solde]
-               );
+        $this->assertEquals($expected,$descriptor->get_bilan_row());
 
     }
     public function testRow_desriptor() {
