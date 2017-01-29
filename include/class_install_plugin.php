@@ -1,0 +1,92 @@
+<?php
+/*
+ *   This file is part of NOALYSS.
+ *
+ *   NOALYSS is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   NOALYSS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with NOALYSS; if not, write to the Free Software
+ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+/*!
+ * \file class_install_plugin.php
+ * \brief Installation and upgrade of "bilaninterne" plugin. 
+ * 
+ * It targets to addpaths in "menu_ref" table so that export functions 
+ * (CSV/PDF) can be launched by "export.php"
+ * \author T. Nancy
+ * \version 0.1
+ * \date 10 janvier 2017
+*/
+require_once NOALYSS_INCLUDE.'/database/class_menu_ref_sql.php';
+
+class Install_Plugin extends Menu_Ref_SQL
+{
+    function __construct($p_cn,$version){
+        $this->cn = $p_cn;
+        $this->version = $version;
+    }
+    /*!
+     * \brief Upgrades the 'menu_ref' table with adhoc paths  
+     */
+    function upgrade($p_dest = 0)
+    {
+        //deletes previous record in 'menu_ref' table
+        $menu_ref = new Menu_Ref_SQL($this->cn);
+        //Delete PDF record un menu_ref table
+        $menu_ref->me_code ='PDF:bilaninterne';
+        $pk=$this->primary_key;
+        $sql=" DELETE FROM ".$this->table." WHERE ".$this->primary_key."= $1";
+        $this->cn->exec_sql($sql,array($this->$pk));
+        //Delete CSV record un menu_ref table
+        $menu_ref->me_code ='CSV:bilaninterne';
+        $pk=$this->primary_key;
+        $sql=" DELETE FROM ". $menu_ref ." WHERE ".$this->primary_key."= $1";
+        $this->cn->exec_sql($sql,array($this->$pk));
+        //install the current version
+        $this->install();
+        return;
+    }
+    /*!
+    * \brief Installs the plugin
+    * 
+    * It creates a 'bilaninterne' schema, and a 'version' table
+    * in the current folder. It adds two records in "menu_ref" table (schema 'public')
+    * so that the path for including export fucntions (CSV or PDF) is settled.
+    */
+    function install() 
+    {
+        $this->cn->start();
+        // creates the 'bilaninterne' schema and a 'version table'
+        $this->cn->exec_sql('CREATE SCHEMA bilaninterne');
+        $this->cn->exec_sql("CREATE TABLE bilaninterne.version (VAL INTEGER PRIMARY KEY)");
+        $this->cn->commit();
+        $this->cn->exec_sql('INSERT INTO bilaninterne.version VALUES ('.$this->version. ')');
+        
+        // adds PDF and CSV records in 'menu_ref' table for data export
+        $menu_ref = new Menu_Ref_SQL($this->cn);
+        //PDF
+        $menu_ref->me_code = 'PDF:bilaninterne';
+        $menu_ref->me_menu = 'Export bilan interne';
+        $menu_ref->me_file = '../ext/bilan_interne/export/bilaninterne_pdf.php';
+        $menu_ref->me_type = 'PR';
+        $menu_ref->insert();
+        //CSV
+        $menu_ref->me_code = 'CSV:bilaninterne';
+        $menu_ref->me_menu = 'Export bilan interne';
+        $menu_ref->me_file = '../ext/bilan_interne/export/bilaninterne_csv.php';
+        $menu_ref->me_type = 'PR';
+        $menu_ref->insert();
+        
+        return;
+    }
+}
