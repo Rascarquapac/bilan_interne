@@ -79,6 +79,18 @@ class row_descriptorTest extends PHPUnit_Framework_TestCase {
         $descriptor= new row_descriptor;
         $this->assertTrue($descriptor->check_consistency($row, 3));
         $this->assertEquals($expected,$descriptor->get_bilan_row());
+        
+        $row = ["0","ACTIF","","",""];
+        $expected=[
+            'linestyle' =>0,
+            'linetype'  =>'tittle', 
+            'label'     => "ACTIF",
+            'poste'     =>'',
+            'solde'     => 0.0];        
+        $descriptor= new row_descriptor;
+        $this->assertTrue($descriptor->check_consistency($row, 3));
+        $this->assertEquals($expected,$descriptor->get_bilan_row());
+        
 
     }
     public function testRow_desriptor() {
