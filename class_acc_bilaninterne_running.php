@@ -26,6 +26,7 @@
 */
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once NOALYSS_INCLUDE.'/class/class_acc_bilan.php';
+require_once NOALYSS_INCLUDE.'/class/class_acc_bilan.php';
 
 /*! 
  * \class Acc_Bilaninterne
