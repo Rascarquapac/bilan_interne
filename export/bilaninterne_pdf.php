@@ -30,20 +30,19 @@
 */
 
 if ( ! defined ('ALLOWED') ) die('Appel direct ne sont pas permis');
-require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_acc_bilaninterne.php';
-require_once NOALYSS_INCLUDE.'/class/class_exercice.php';
-require_once NOALYSS_INCLUDE.'/lib/class_database.php';
-require_once NOALYSS_INCLUDE.'/lib/class_pdf.php';
+require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_acc_bilaninterne.php';
+require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_output_bilaninterne.php';
 
 extract ($_GET);
-
 $cn=Dossier::connect();
 $bilaninterne=new Acc_Bilaninterne($cn);
 $bilaninterne->b_id =$b_id;
 $bilaninterne->from =$periode_from;
 $bilaninterne->to   =$periode_to;
 $bilaninterne->load();
-
-$result = $bilaninterne->generate();
-$bilaninterne->output_pdf($result,$cn);
-?>
+$bilaninterne->generate();
+//Ouput PDF
+$output = new output_bilaninterne;
+$output->from=$periode_from;
+$output->to =$periode_to;
+$output->output_pdf($bilaninterne->bilan_table,$cn);
