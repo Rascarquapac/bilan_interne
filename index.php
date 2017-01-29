@@ -33,6 +33,7 @@ if ( ! defined ('ALLOWED') ) {die('Appel direct non permis');}
 require_once NOALYSS_INCLUDE.'/class/class_exercice.php';
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_acc_bilaninterne.php';
+require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_output_bilaninterne.php';
 require_once NOALYSS_INCLUDE.'/ext/bilan_interne/include/class_install_plugin.php';
    
 global $g_user;
@@ -161,6 +162,11 @@ else
         echo "</table>";
     echo '</div>';
     // generates the HTML output
-    $result = $bilaninterne->generate();
-    $bilaninterne->output_html($cn,$result);
+    $bilaninterne->generate();
+    
+    $output = new output_bilaninterne;
+    $output->from=$bilaninterne->from;
+    $output->to  =$bilaninterne->to;
+
+    $output->output_html($bilaninterne->bilan_table,$cn);
 }
