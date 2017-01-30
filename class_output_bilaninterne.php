@@ -1,10 +1,30 @@
 <?php
+/*
+ *   This file is part of NOALYSS.
+ *
+ *   NOALYSS is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   NOALYSS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with NOALYSS; if not, write to the Free Software
+ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*!
+ * \file class_output_bilaninterne.php
+ * \brief Result display and export methods
+ * \author T. Nancy
+ * \version 0.1
+ * \date 10 janvier 201
+*/
+
 require_once NOALYSS_INCLUDE. '/lib/class_database.php';
 require_once NOALYSS_INCLUDE. '/lib/class_noalyss_csv.php'; 
 require_once NOALYSS_INCLUDE. '/lib/class_pdf.php'; 
@@ -12,12 +32,20 @@ require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_acc_bilaninterne.php';
 require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_output_bilaninterne.php';
 require_once NOALYSS_INCLUDE. '/class/class_periode.php';
 
+/*! 
+ * \class output_bilaninterne
+ * \brief Generates html output and exports in PDF and CSV format 
+ */
 class output_bilaninterne
 {
     public $from;
     public $to;
 
     function output_html($result,$cn){
+    /*!Creates HTML presentation of the result table
+     *\param $result, the current csv line
+     *\param $cn the current connection to the database
+    */
         $periode   = new Periode($cn);
         $date_from = $periode->first_day($this->from);
         $date_to   = $periode->last_day($this->to);
@@ -80,6 +108,10 @@ class output_bilaninterne
     }    
     
     function output_pdf($result,$cn){
+    /*!Creates PDF output of the result table
+     *\param $result, the current csv line
+     *\param $cn the current connection to the database
+    */
         $periode=new Periode($cn);
         $date_limit_start=$periode->first_day($this->from);
         $date_limit_end=$periode->last_day($this->to);
@@ -140,7 +172,10 @@ class output_bilaninterne
     }
     
     function output_csv($result,$cn){
-        //echo 'CSV output of Bilan Interne is under development <br>';
+    /*!Creates CSV output of the result table
+     *\param $result, the current csv line
+     *\param $cn the current connection to the database
+    */
         $periode=new Periode($cn);
         $date_limit_start = $periode->first_day($this->from);
         $date_limit_end   = $periode->last_day($this->to);
@@ -162,5 +197,4 @@ class output_bilaninterne
         }
         return($r);
     }
-    
 }
