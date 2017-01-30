@@ -39,12 +39,11 @@ require_once NOALYSS_INCLUDE.'/ext/bilan_interne/include/class_install_plugin.ph
 global $g_user;
 global $cn;
 
-/*!
- * \brief Builds the form dedicated to the exercice selection 
+function exercice_selection_form($exercice)
+/*! Builds the form dedicated to the exercice selection 
  * \param $exercice The current exercice
  * \return The resulting HTML form
  */
-function exercice_selection_form($exercice)
 {
     global $cn;
     // Build $wex, an ISelect widget for exercice selection
@@ -61,13 +60,12 @@ function exercice_selection_form($exercice)
     $form .= '</fieldset>';
     return ($form);
  }    
-/*!
- * \brief Builds the form dedicated to periods selection 
+function periods_selection_form($bilan,$exercice)
+/*!Builds the form dedicated to periods selection 
  * \param $bilan The bilan object and the selected exercice
  * \param $cn The exercice to be processed object and the selected exercice
  * \return The resulting HTML form
  */
-function periods_selection_form($bilan,$exercice)
 {
     $filter_year=" where p_exercice='".sql_string($exercice)."'";
     $form  = '<form  method="GET">';
@@ -78,14 +76,14 @@ function periods_selection_form($bilan,$exercice)
     $form .= '</form>';
     return ($form);
 }
-/*!
+function exportpdf_submit_button($bilan)
+/*! Builds form dedicated to "Export PDF" submit button
  * \brief Builds form dedicated to "Export PDF" submit button
  * \brief It stores parameters $_GET parameters for export.php processing
  * \param $bilan The bilan object
  * \return The resulting HTML form
  * \brief Store parameters $_GET parameters for export.php processing
  */
-function exportpdf_submit_button($bilan)
 {
     $form  =  '<form method="GET" action=' .'export.php' .'>';
     $form .=    dossier::hidden();
@@ -98,12 +96,11 @@ function exportpdf_submit_button($bilan)
     $form .=  '</form>';
     return($form);
 }
-/*!
- * \brief Build form dedicated to "Export CSV" submit button
+function exportcsv_submit_button($bilan)
+/*!Builds form dedicated to "Export CSV" submit button
  * \param $bilan The bilan object
  * \brief Store parameters $_GET parameters for export.php processing
  */
-function exportcsv_submit_button($bilan)
 {
     $form  =  '<form method="GET" action=' .'export.php' .'>';
     $form .=    dossier::hidden();
