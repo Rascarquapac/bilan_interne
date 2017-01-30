@@ -22,19 +22,15 @@
  * \brief Description of the bilaninterne subclass of bilan class
  * \author T. Nancy
  * \version 0.1
- * \date 10 janvier 201
+ * \date 10 janvier 2017
 */
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once NOALYSS_INCLUDE.'/class/class_acc_bilan.php';
 
 /*! 
- * \class Acc_Bilaninterne
- * \brief Generates an detailled balance sheet according to 
- * 
- * - a set of Noalyss formulas (./templates/bilaninterne.form file) 
- * - a set of structure infos (./templates/bilaninterne.rtf file). 
- * 
- * An array is first generated ("$result") and converted as HTML output. 
+ * \class row_descriptor 
+ * \brief Extracts information from a description row contaitns in the bilan interne
+ * description file (bilaninterne.csv). This description file specifies output generation 
  */
 class row_descriptor
 {
@@ -50,15 +46,13 @@ class row_descriptor
     function __construct() 
     {
     }
-    /*!
-    * \brief Checks line consistency of csv row (file "bilaninterne.csv")
-    * \param $row, the current csv line
-    * \param $line_num, the csv line number
-    * \return true or false
+    function check_consistency($row,$line_num){
+    /*! Checks content of description row read from csv file ("bilaninterne.csv")
+     *\brief Sets basicobject properties  
+     *\param $row, the current csv line
+     *\param $line_num, the csv line number
+     *\return true or false
     */
-    function check_consistency($row,$line_num)
-    {
-        //Forget first row (header)
         if($line_num==1)  {return(false);}
         //Abort when empty row
         if (count($row) == 1) {throw new Exception(_('Ligne vide'));}
@@ -93,9 +87,12 @@ class row_descriptor
         $this->flatten       = ($flatten == 'yes') ? true : false;
         return(true);
     }
-                //BUILDING LEFT POSTE IS MORE SOPHISTICATED : ex: 172/3 !! exceptions !!
-                // Normal building of left range from combined code ex: 172/3
     function composed_ranges($code_left,$code_right)
+    /*!Processed "poste" boundaries for code without direct interpretation
+     *\brief Only 2 special cases from BNB(Banque Nationale de Belgique) are currently
+     * processed
+     *\return A list of array with simple boundaries 
+     */        
     {
         $base_length= strlen($code_left)-strlen($code_right);
         $code_right = substr($code_left,0,$base_length).$code_right;
@@ -116,6 +113,10 @@ class row_descriptor
     }
     
     function code_ranges($code)
+    /*! Extracts "poste" boundaries from a code providen in the csv description row 
+     *\param code code field from csv description row
+     *\return A list of poste boundaries
+     */
     {
         if ($code == '') {
             $code_ranges  = [];
@@ -137,6 +138,9 @@ class row_descriptor
         return ($code_ranges);
     }
     function linetype($code_ranges)
+    /*!Computes 'linetype' from code_ranges  
+     *\return line type
+     */
     {
         $count = count($code_ranges);
         if     ($count === 0) {return("tittle");}
@@ -144,7 +148,11 @@ class row_descriptor
         elseif ($code_ranges[0]["left"] === $code_ranges[0]["right"])  {return("parent");}
         else {return ("combined");}
     }
+    
     function variable_name($linetype,$variable_form)
+    /*!Extracts variable name from variable formula given in description file
+     *\return variable name 
+     */
     {
         if ($linetype === "tittle")
         {
@@ -166,6 +174,9 @@ class row_descriptor
     }
     
     function get_bilan_row()
+    /*!Main method managing the data extraction, filling properties
+     *\return preprocessed array for bilaninterne table
+     */
     {
         $bilan_row =[];
         $this->code_ranges = $this->code_ranges($this->code);
