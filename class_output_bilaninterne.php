@@ -46,6 +46,9 @@ class output_bilaninterne
      *\param $result, the current csv line
      *\param $cn the current connection to the database
     */
+        //Current dossier reference for Javascript display feature
+        $gDossier=dossier::id();
+        // Periode info for documenting ouput
         $periode   = new Periode($cn);
         $date_from = $periode->first_day($this->from);
         $date_to   = $periode->last_day($this->to);
