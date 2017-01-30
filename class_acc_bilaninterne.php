@@ -32,7 +32,7 @@ require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_row_descriptor.php';
 
 /*! 
  * \class Acc_Bilaninterne
- * \brief Generates an detailled balance sheet according to 
+ * \brief Generates a table containing lines data of a detailled balance sheet according to 
  * 
  * - a set of Noalyss formulas (./templates/bilaninterne.form file) 
  * - a set of structure infos (./templates/bilaninterne.rtf file). 
@@ -47,17 +47,11 @@ class Acc_Bilaninterne extends Acc_Bilan
     {
         parent::__construct($p_cn);
     }
-    /*!
-    * \brief Analyzes and converts content of csv row  (file "bilaninterne.csv") 
-    * 
-    * - linestyle, rubrique, flatten cells    
-    * Variable field is replaced by its value
-    * \param $row, the current csv line
-    * \param $line_num, the csv line number
-    * \return array with line values and useful properties
-    */
-    
     function get_montant($variable_name,$linetype)
+    /*!Reads the variable value computed from the formula description file  
+     * (bilaninterne.form) and stored in the object property with name "$variable_name"
+     * \return the float value stored when right line type or 0.0
+     */
     {
         if (($linetype ==="parent") || ($linetype==="combined"))
         {
@@ -81,20 +75,17 @@ class Acc_Bilaninterne extends Acc_Bilan
     }
     
     
-    /*!
-     * \brief Parses a csv template file describing the structure of the detailled balance sheet
-     * The first row of the csv file is a header used for documentation.
-     * The following rows describe the formatting and data to be output for associated accounting item range. Blank rows are allowed
-     * The first data column contains a the depth of the item in the structured balance sheet (0 is the top level). Its used to format the output.
-     * The second column is the text to be display for the given item
-     * The third column  column describes the items range associated the row
-     * The fourth column indicates the formula to be used to compute the amount associated to the item range.
-     * This formula must be describe in the "bilaninterne.form" file. The syntax of the is the one used by Noalyss for the bilan
-     * The fifth column must be either the "yes" either "no" according to the item range must be spreaded or not.
-     * \param $csv the handle to the csv template file  
-     * \return A filtered array of csv template content
-     */
     function parse_csvtemplate($csv)
+     /*! Parses the "bilaninterne.csv" description file 
+      * \param $csv the handle to the csv template file  
+      * \return The table data to be displayed or exported
+      * \brief For each line of the description file checks content coherency and extracts data.
+      * It spreads a "code" row when a "flatten" flag is set in the desciption file 
+      * and get from the database tables the associated info ans solde
+      * 
+      * The table result is stored in the "bilan_table" property
+     */
+
     {        
         try
         {
@@ -138,10 +129,13 @@ class Acc_Bilaninterne extends Acc_Bilan
         }
         return;
     }
-        /*!
-        * \brief Expand the "bilan" array with associated "leaf postes" 
-        */
     function get_solde($pcm_type,$solde_deb,$solde_cred)
+        /*!Compute the "solde" amount of a "poste" and its sign depending on the pcmn type of the poste 
+         * \param $pcm_type  : pcmn type associated with the poste 
+         * \param $solde_deb 
+         * \param $solde_deb
+         * \return $solde 
+        */
     {
         if ($pcm_type === 'CHA' || $pcm_type === 'CHAINV' || $pcm_type === 'ACT' || $pcm_type === 'ACTINV' || $pcm_type === 'CON'){
             $solde = $solde_deb - $solde_cred;
@@ -156,6 +150,11 @@ class Acc_Bilaninterne extends Acc_Bilan
 
     }
     function get_sql_postes_range($code_left,$code_right)
+    /*!Creates sql request for getting the fields of "postes" inside an interval of poste
+     * \param $code_left : low poste bound
+     * \param $code_left : high poste bound
+     * \return sql query
+     */
     {
         global $g_user;
         $filter_sql=$g_user->get_ledger_sql('ALL',3);
@@ -190,6 +189,13 @@ class Acc_Bilaninterne extends Acc_Bilan
     }
     
     function get_range_postes($code_left,$code_right)
+    /*!generates a table of rows comptabile with bilan_table property,
+     * \brief Each row is associated to a "poste" and contains usefull fields; 
+     * each poste with non zero "solde" has its own row 
+     * \param $code_left :low poste bound
+     * \param $code_left : high poste bound
+     * \return 2D array compatible with "bilan_table" property
+     */
     {
         $sql=$this->get_sql_postes_range($code_left,$code_right);
         $cn=clone $this->db;
@@ -215,7 +221,10 @@ class Acc_Bilaninterne extends Acc_Bilan
         return $array;
     }
 
-    function open_check($filename){
+    function open_check($filename)
+    /*! Check file before processing
+     */
+    {
         $file = fopen($filename, 'r');
         if ( $file == false)
         {
@@ -224,7 +233,10 @@ class Acc_Bilaninterne extends Acc_Bilan
         }
         return $file;
     }
-    function generate(){
+    function generate()
+     /*!Generates data to be output as a bilaninterne and stores it in table_bilan property
+     */
+    {
         // Process formulas from the ".form" file, store it as object properties
         $formulasfile =  NOALYSS_PLUGIN. '/bilan_interne/templates/bilaninterne.form';
         $formulas= $this->open_check($formulasfile); 
@@ -236,7 +248,6 @@ class Acc_Bilaninterne extends Acc_Bilan
         $csv= $this->open_check($csvfilename);
         $this->parse_csvtemplate($csv);
         fclose($csv);
-        //$result = $this->add_leaf_postes($table_bilan);
         return;
     }     
 }
