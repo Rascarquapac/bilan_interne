@@ -40,8 +40,6 @@ class Install_Plugin extends Menu_Ref_SQL
      */
     function upgrade($p_dest = 0)
     {
-        //install the current version
-        $this->install();
         return;
     }
     /*!
