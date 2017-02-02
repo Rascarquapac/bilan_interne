@@ -40,20 +40,6 @@ class Install_Plugin extends Menu_Ref_SQL
      */
     function upgrade($p_dest = 0)
     {
-        //deletes previous record in 'menu_ref' table
-        $menu_ref = new Menu_Ref_SQL($this->cn);
-        //Delete PDF record un menu_ref table
-        $menu_ref->me_code ='PDF:bilaninterne';
-        $pk=$this->primary_key;
-        $sql=" DELETE FROM ".$this->table." WHERE ".$this->primary_key."= $1";
-        $this->cn->exec_sql($sql,array($this->$pk));
-        //Delete CSV record un menu_ref table
-        $menu_ref->me_code ='CSV:bilaninterne';
-        $pk=$this->primary_key;
-        $sql=" DELETE FROM ". $menu_ref ." WHERE ".$this->primary_key."= $1";
-        $this->cn->exec_sql($sql,array($this->$pk));
-        //install the current version
-        $this->install();
         return;
     }
     /*!
@@ -65,28 +51,6 @@ class Install_Plugin extends Menu_Ref_SQL
     */
     function install() 
     {
-        $this->cn->start();
-        // creates the 'bilaninterne' schema and a 'version table'
-        $this->cn->exec_sql('CREATE SCHEMA bilaninterne');
-        $this->cn->exec_sql("CREATE TABLE bilaninterne.version (VAL INTEGER PRIMARY KEY)");
-        $this->cn->commit();
-        $this->cn->exec_sql('INSERT INTO bilaninterne.version VALUES ('.$this->version. ')');
-        
-        // adds PDF and CSV records in 'menu_ref' table for data export
-        $menu_ref = new Menu_Ref_SQL($this->cn);
-        //PDF
-        $menu_ref->me_code = 'PDF:bilaninterne';
-        $menu_ref->me_menu = 'Export bilan interne';
-        $menu_ref->me_file = '../ext/bilan_interne/export/bilaninterne_pdf.php';
-        $menu_ref->me_type = 'PR';
-        $menu_ref->insert();
-        //CSV
-        $menu_ref->me_code = 'CSV:bilaninterne';
-        $menu_ref->me_menu = 'Export bilan interne';
-        $menu_ref->me_file = '../ext/bilan_interne/export/bilaninterne_csv.php';
-        $menu_ref->me_type = 'PR';
-        $menu_ref->insert();
-        
         return;
     }
 }
