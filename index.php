@@ -76,44 +76,38 @@ function periods_selection_form($bilan,$exercice)
     $form .= '</form>';
     return ($form);
 }
-function exportpdf_submit_button($bilan)
+function exportpdf_submit_button()
 /*! Builds form dedicated to "Export PDF" submit button
  * \brief Builds form dedicated to "Export PDF" submit button
- * \brief It stores parameters $_GET parameters for export.php processing
- * \param $bilan The bilan object
- * \return The resulting HTML form
+ * \brief It reuses parameters stored by periods_selection_form function in $_REQUEST 
+ * \bried It sets the action to be selected by raw.php (launched by extension.raw.php)
+ * \return The resulting HTML button form
  * \brief Store parameters $_GET parameters for export.php processing
  */
 {
-    $form  =  '<form method="GET" action=' .'export.php' .'>';
-    $form .=    dossier::hidden();
-    $form .=    HtmlInput::hidden("ac",$_REQUEST['ac']);
-    $form .=    HtmlInput::hidden("act","PDF:bilaninterne");
-    $form .=    HtmlInput::hidden("b_id",$bilan->b_id);
-    $form .=    HtmlInput::hidden("periode_from",$bilan->from);
-    $form .=    HtmlInput::hidden("periode_to",$bilan->to) ;
-    $form .=    HtmlInput::submit('bt_pdf',"Export PDF");
-    $form .=  '</form>';
-    return($form);
+    $ref_pdf = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'b_id','from_periode','to_periode'), $_REQUEST, 'extension.raw.php?');
+    $ref_pdf.="&amp;act=export_bilaninterne_pdf";
+    return(HtmlInput::button_anchor("Export PDF", $ref_pdf, 'export_id', "", 'smallbutton'));
 }
-function exportcsv_submit_button($bilan)
+function exportcsv_submit_button()
 /*!Builds form dedicated to "Export CSV" submit button
- * \param $bilan The bilan object
- * \brief Store parameters $_GET parameters for export.php processing
+ * \brief Builds form dedicated to "Export PDF" submit button
+ * \brief It reuses parameters stored by periods_selection_form function in $_REQUEST 
+ * \bried It sets the action to be selected by raw.php (launched by extension.raw.php)
+ * \return The resulting HTML button form
  */
 {
-    $form  =  '<form method="GET" action=' .'export.php' .'>';
-    $form .=    dossier::hidden();
-    $form .=    HtmlInput::hidden("ac",$_REQUEST['ac']);
-    $form .=    HtmlInput::hidden("act","CSV:bilaninterne");
-    $form .=    HtmlInput::hidden("b_id",$bilan->b_id);
-    $form .=    HtmlInput::hidden("periode_from",$bilan->from);
-    $form .=    HtmlInput::hidden("periode_to",$bilan->to) ;
-    $form .=    HtmlInput::submit('bt_pdf',"Export CSV");
-    $form .=  '</form>';
-    return($form);
+    $ref_csv = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'b_id','from_periode','to_periode'), $_REQUEST, 'extension.raw.php?');
+    $ref_csv.="&amp;act=export_bilaninterne_csv";
+    return(HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id', "", 'smallbutton'));
 }
-
+function print_submit_button()
+/*!Builds form dedicated to "Print" submit button
+ * \return The resulting HTML button form
+ */
+{
+    return(HtmlInput::button_anchor(_('Imprimer'), "", 'export_id', 'onclick="window.print();"', 'smallbutton'));
+}
 
 $bilaninterne_version = 6960;
 $bilaninterne=new Acc_Bilaninterne($cn);
@@ -147,13 +141,13 @@ else
         echo "<table>";
             echo '<TR>';
                 echo '<td>';
-                    echo exportpdf_submit_button($bilaninterne);
+                    echo exportpdf_submit_button();
                 echo "</td>";
                 echo '<td>';
-                    echo exportcsv_submit_button($bilaninterne);
+                    echo exportcsv_submit_button();
                 echo "</td>";
-                echo '<td style="vertical-align:top">';
-                    echo HtmlInput::print_window();
+                echo '<td>';
+                    echo print_submit_button();
                 echo '</td>';
             echo "</TR>";
         echo "</table>";
