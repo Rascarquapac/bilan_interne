@@ -40,6 +40,8 @@ class Install_Plugin extends Menu_Ref_SQL
      */
     function upgrade($p_dest = 0)
     {
+        //install the current version
+        $this->install();
         return;
     }
     /*!
@@ -51,6 +53,13 @@ class Install_Plugin extends Menu_Ref_SQL
     */
     function install() 
     {
+        $this->cn->start();
+        // creates the 'bilaninterne' schema and a 'version table'
+        $this->cn->exec_sql('CREATE SCHEMA bilaninterne');
+        $this->cn->exec_sql("CREATE TABLE bilaninterne.version (VAL INTEGER PRIMARY KEY)");
+        $this->cn->commit();
+        $this->cn->exec_sql('INSERT INTO bilaninterne.version VALUES ('.$this->version. ')');
+                
         return;
     }
 }
