@@ -156,10 +156,14 @@ class output_bilaninterne
                 }
                 else {
                     //BNB synthetic line
-                    $pdf->SetFont('DejaVu','BI',7);                
-                    $pdf->Cell(140,6,$r['label'],0,0,'L',0,0);
-                    $pdf->Cell(25,6,$r['poste'],0,0,'L',0);
-                    $pdf->Cell(25,6,nbm($r['solde']),0,0,'R',0);
+                    $pdf->SetFont('DejaVu','BI',7);  
+                    $pdf->LongLine(140,6,$r['label'],0,'L');
+                    $pdf->write_cell(25,6,$r['poste'],0,0,'L');
+                    $pdf->write_cell(25,6,nbm($r['solde']),0,0,'R');
+                    $pdf->line_new(1);
+//                    $pdf->Cell(140,6,$r['label'],0,0,'L',0,0);
+//                    $pdf->Cell(25,6,$r['poste'],0,0,'L',0);
+//                    $pdf->Cell(25,6,nbm($r['solde']),0,0,'R',0);
                 }
             }
             else {
