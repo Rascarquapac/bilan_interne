@@ -143,9 +143,16 @@ class output_bilaninterne
                 if ($r['linetype'] == 'tittle'){
                     //Tittle line
                     $fill = "even";
-                    $pdf->SetFont('DejaVu','B',10);
-                    $pdf->LongLine(190,10,$r['label'],0,'C',$fill);
-                    $pdf->line_new(2);
+                    if ($r['linestyle'] > 0) {
+                        $pdf->SetFont('DejaVu','B',8);
+                        $pdf->LongLine(190,10,$r['label'],0,'L',$fill);
+                        $pdf->line_new(2);
+                    }
+                    else {
+                        $pdf->SetFont('DejaVu','B',10);
+                        $pdf->LongLine(190,10,$r['label'],0,'C',$fill);
+                        $pdf->line_new(2);
+                    }
                 }
                 else {
                     //BNB synthetic line
