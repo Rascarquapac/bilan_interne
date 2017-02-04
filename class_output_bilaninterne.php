@@ -128,11 +128,6 @@ class output_bilaninterne
         $pdf->SetFont('DejaVuCond','',7);
         $pdf->setTitle("Balance interne",true);
 
-        $pdf->LongLine(140,6,'Libellé');
-        $pdf->write_cell(25,6,'poste');
-        $pdf->write_cell(25,6,'Montant');
-        $pdf->line_new(2);
-
         bcscale(2);
         foreach ($result as $r){
             $pdf->SetFont('DejaVuCond','',8);
