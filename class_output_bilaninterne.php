@@ -109,7 +109,14 @@ class output_bilaninterne
             echo '</table>';
         echo '</div>';
     }    
-    
+    function output_pdf_row($pdf,$r,$indent_length,$width,$fill)
+    {
+        if ($indent_length != 0) {$pdf->write_cell($indent_length,$width,'',0,0,'L',$fill);}
+        $pdf->LongLine((140 - $indent_length),$width,$r['label'],0,false,'L');
+        $pdf->write_cell(25,$width,$r['poste'],0,0,'L',$fill);
+        $pdf->write_cell(25,$width,nbm($r['solde']),0,0,'R',$fill);
+        $pdf->line_new(2);
+    }
     function output_pdf($result,$cn){
     /*!Creates PDF output of the result table
      *\param $result, the current csv line
@@ -137,23 +144,19 @@ class output_bilaninterne
                     //Tittle line
                     $fill = "even";
                     $pdf->SetFont('DejaVu','B',10);
-                    $pdf->LongLine(190,10,$r['label']);
+                    $pdf->LongLine(190,10,$r['label'],0,'C',$fill);
                     $pdf->line_new(2);
                 }
                 else {
                     //BNB synthetic line
                     $fill = "even";
-                    $indent_step = 5;
+                    $indent_step = 4;
                     $linestyle = $r['linestyle'];
                     $indent_depth = max(0,$linestyle-2);
                     $indent_length = $indent_step * $indent_depth;
                     $indent_leaf   = $indent_length + $indent_step;
                     $pdf->SetFont('DejaVu','BI',7);  
-                    if ($indent_length != 0) {$pdf->write_cell($indent_length,5,'',0,0,'L',$fill);}
-                    $pdf->LongLine((140 - $indent_length),5,$r['label'],0,false,'L');
-                    $pdf->write_cell(25,5,$r['poste'],0,0,'L',$fill);
-                    $pdf->write_cell(25,5,nbm($r['solde']),0,0,'R',$fill);
-                    $pdf->line_new(2);
+                    $this->output_pdf_row($pdf,$r,$indent_length,5,$fill);
                 }
             }
             else {
@@ -166,11 +169,7 @@ class output_bilaninterne
                     $fill="even";
                     $pdf->SetFillColor(255,255,255);
                 }
-                $pdf->write_cell($indent_leaf,4,'',0,0,'L',$fill);
-                $pdf->LongLine((140 - $indent_leaf),4,$r['label'],0,false,'L');
-                $pdf->write_cell(25,4,$r['poste'],0,0,'L',$fill);
-                $pdf->write_cell(25,4,nbm($r['solde']),0,0,'R',$fill);
-                $pdf->line_new(2);
+                $this->output_pdf_row($pdf,$r,$indent_leaf,4,$fill);
             }            
         }
         $fDate=date('dmy-Hi');
