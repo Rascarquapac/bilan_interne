@@ -61,23 +61,20 @@ class output_bilaninterne
                 echo '<th>Libell&eacute;</th>';
                 echo '<th>Poste Comptable</th>';
                 echo '<th>Solde</th>';
-            $i=0;
             bcscale(2);
             foreach ($result as $r){
-                //print_r($r);echo '<br>';
-                $i++;
-                //Line background
-                if ( $i%2 == 0 )
-                    $tr="even";
-                else
-                    $tr="odd";
-                //Javascript "view_history" set
                 $view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF="javascript:view_history_account(\'%s\',\'%s\')" >%s</A>',
                                        $r['poste'], $gDossier, $r['poste']);
 
                 if ($r['linetype'] != 'leaf'){
                     if ($r['linetype'] == 'tittle'){
-                        $tittle_style = 'style="font-weight:bold;font-size:150%;text-align:center;"';
+                        $fill = "even";
+                        if ($r['linestyle'] > 0) {
+                            $tittle_style = 'style="font-weight:bold;font-size:120%;text-align:left;"';
+                        }
+                        else {
+                            $tittle_style = 'style="font-weight:bold;font-size:150%;text-align:center;"';
+                        }
                         //echo $style.'<br>';
                         echo '<TR >';
                             echo td($r['label'], $tittle_style);
