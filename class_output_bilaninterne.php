@@ -129,50 +129,54 @@ class output_bilaninterne
         $pdf->setTitle("Balance interne",true);
 
         $pdf->LongLine(140,6,'Libellé');
-        $pdf->Cell(25,6,'poste');
-        $pdf->Cell(25,6,'Montant',0,0,'R');
-        $pdf->Ln();
+        $pdf->write_cell(25,6,'poste');
+        $pdf->write_cell(25,6,'Montant');
+        $pdf->line_new(2);
 
         bcscale(2);
-        $i=0;
         foreach ($result as $r){
             $pdf->SetFont('DejaVuCond','',8);
-            //Line background
-            if ( $i%2 == 0 ){
-                $pdf->SetFillColor(220,221,255);
-                $fill="even";
-            }
-            else {
-                $fill="odd";
-                $pdf->SetFillColor(255,255,255);
-            }
-            $i++;
+            $pdf->SetFillColor(255,255,255);
             if ($r['linetype'] != 'leaf'){
-                $i=0;
                 if ($r['linetype'] == 'tittle'){
                     //Tittle line
-                    $pdf->SetFont('DejaVu','B',8);
-                    $pdf->LongLine(190,6,$r['label']);
+                    $fill = "even";
+                    $pdf->SetFont('DejaVu','B',10);
+                    $pdf->LongLine(190,10,$r['label']);
+                    $pdf->line_new(2);
                 }
                 else {
                     //BNB synthetic line
+                    $fill = "even";
+                    $indent_step = 5;
+                    $linestyle = $r['linestyle'];
+                    $indent_depth = max(0,$linestyle-2);
+                    $indent_length = $indent_step * $indent_depth;
+                    $indent_leaf   = $indent_length + $indent_step;
                     $pdf->SetFont('DejaVu','BI',7);  
-                    $pdf->LongLine(140,6,$r['label'],0,'L');
-                    $pdf->write_cell(25,6,$r['poste'],0,0,'L');
-                    $pdf->write_cell(25,6,nbm($r['solde']),0,0,'R');
-                    $pdf->line_new(1);
-//                    $pdf->Cell(140,6,$r['label'],0,0,'L',0,0);
-//                    $pdf->Cell(25,6,$r['poste'],0,0,'L',0);
-//                    $pdf->Cell(25,6,nbm($r['solde']),0,0,'R',0);
+                    if ($indent_length != 0) {$pdf->write_cell($indent_length,5,'',0,0,'L',$fill);}
+                    $pdf->LongLine((140 - $indent_length),5,$r['label'],0,false,'L');
+                    $pdf->write_cell(25,5,$r['poste'],0,0,'L',$fill);
+                    $pdf->write_cell(25,5,nbm($r['solde']),0,0,'R',$fill);
+                    $pdf->line_new(2);
                 }
             }
             else {
                 //Leaf rows building
-                $pdf->Cell(140,6,$r['label'],0,0,'L',$fill);
-                $pdf->Cell(25,6,$r['poste'],0,0,'L',$fill);
-                $pdf->Cell(25,6,nbm($r['solde']),0,0,'R',$fill);
-            }
-            $pdf->Ln();
+                if ( $fill === "even" ){
+                    $fill="odd";
+                    $pdf->SetFillColor(220,221,255);
+                }
+                else {
+                    $fill="even";
+                    $pdf->SetFillColor(255,255,255);
+                }
+                $pdf->write_cell($indent_leaf,4,'',0,0,'L',$fill);
+                $pdf->LongLine((140 - $indent_leaf),4,$r['label'],0,false,'L');
+                $pdf->write_cell(25,4,$r['poste'],0,0,'L',$fill);
+                $pdf->write_cell(25,4,nbm($r['solde']),0,0,'R',$fill);
+                $pdf->line_new(2);
+            }            
         }
         $fDate=date('dmy-Hi');
         $pdf->Output('bilaninterne-'.$fDate.'.pdf','D');
