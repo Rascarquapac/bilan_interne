@@ -28,9 +28,8 @@
 require_once NOALYSS_INCLUDE. '/lib/class_database.php';
 require_once NOALYSS_INCLUDE. '/lib/class_noalyss_csv.php'; 
 require_once NOALYSS_INCLUDE. '/lib/class_pdf.php'; 
-require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_acc_bilaninterne.php';
-require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_output_bilaninterne.php';
 require_once NOALYSS_INCLUDE. '/class/class_periode.php';
+require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
 
 /*! 
  * \class output_bilaninterne
@@ -52,8 +51,6 @@ class output_bilaninterne
         $date_to   = $periode->last_day($this->to);
         echo '<div class="content">';
             echo '<hr>';
-            // Display results
-
             echo "<h2 class=\"info\"> période du ".$date_from." au ".$date_to."</h2>";
             echo '<table id="t_balance" width="90%">';
                 echo '<th>Libell&eacute;</th>';
@@ -71,7 +68,6 @@ class output_bilaninterne
                         else {
                             $tittle_style = 'style="font-weight:bold;font-size:150%;text-align:center;"';
                         }
-                        //echo $style.'<br>';
                         echo '<TR >';
                             echo td($r['label'], $tittle_style);
                             echo td('','style="font-weight:bold;"');
@@ -93,7 +89,6 @@ class output_bilaninterne
                 else {
                     $fill = ( $fill === "even" ) ? "odd" : "even";
                     echo '<TR class="'.$fill.'">';
-                        //echo td(h($justification.$decalage.$r['label']));
                         echo td(h($r['label']),'style="' . $indent_leaf_style . '"');
                         echo td($view_history);
                         echo td(nbm($r['solde']),'style="text-align:right;"');
@@ -198,7 +193,6 @@ class output_bilaninterne
             foreach ($line_header as $key) {
                 $csv->add($row[$key],"text");
             }
-            //echo "\n";
             $csv->write();
         }
         return($r);
