@@ -40,11 +40,11 @@ class output_bilaninterne
     public $from;
     public $to;
 
-    function output_html($result,$cn){
     /*!Creates HTML presentation of the result table
      *\param $result, the current csv line
      *\param $cn the current connection to the database
     */
+    function output_html($result,$cn){
         // Periode info for documenting ouput
         $periode   = new Periode($cn);
         $date_from = $periode->first_day($this->from);
@@ -106,11 +106,11 @@ class output_bilaninterne
         $pdf->write_cell(25,$width,nbm($r['solde']),0,0,'R',$fill);
         $pdf->line_new(2);
     }
-    function output_pdf($result,$cn){
     /*!Creates PDF output of the result table
      *\param $result, the current csv line
      *\param $cn the current connection to the database
     */
+    function output_pdf($result,$cn){
         $periode=new Periode($cn);
         $date_limit_start=$periode->first_day($this->from);
         $date_limit_end=$periode->last_day($this->to);
@@ -172,11 +172,11 @@ class output_bilaninterne
         $pdf->Output('bilaninterne-'.$fDate.'.pdf','D');
     }
     
-    function output_csv($result,$cn){
     /*!Creates CSV output of the result table
      *\param $result, the current csv line
      *\param $cn the current connection to the database
     */
+    function output_csv($result,$cn){
         $periode=new Periode($cn);
         $date_limit_start = $periode->first_day($this->from);
         $date_limit_end   = $periode->last_day($this->to);
