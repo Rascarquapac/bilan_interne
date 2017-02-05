@@ -103,7 +103,7 @@ Linetype,Rubrique,Code,Montant,Ventilation
 1,Charges financières (-) ,65,<<$C65>>,yes
 2,Bénéfice courant avant impôts (+),70/65,<<$S32>>,no
 2,Perte courante avant impôts (-),65/70,(<<$S33>>),no
-1,III Produits exceptionnels,,,
+1,III Produits et charges exceptionnels,,,
 1,Produits exceptionnels,76,<<$C76>>,yes
 1,Charges exceptionnelles (-) ,66,<<$C66>>,yes
 1,Bénéfice de l'exercice avant impôts (+),70/66,<<$S34>>,no
