@@ -30,14 +30,15 @@
  * \date 10 janvier 2017
  */
 if ( ! defined ('ALLOWED') ) {die('Appel direct non permis');}
-require_once NOALYSS_INCLUDE.'/class/class_exercice.php';
-require_once NOALYSS_INCLUDE.'/lib/class_database.php';
-require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_acc_bilaninterne.php';
-require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_output_bilaninterne.php';
-require_once NOALYSS_INCLUDE.'/ext/bilan_interne/include/class_install_plugin.php';
+require_once 'bilaninterne_constant.php';
+require_once NOALYSS_INCLUDE . '/class/class_exercice.php';
+require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
+require_once BILAN_INTERNE_HOME . '/class_output_bilaninterne.php';
+require_once BILAN_INTERNE_HOME . '/include/class_install_plugin.php';
    
 global $g_user;
 global $cn;
+$cn=Dossier::connect();;
 
 function exercice_selection_form($exercice)
 /*! Builds the form dedicated to the exercice selection 
@@ -121,13 +122,11 @@ if ( !isset($_GET['bilaninterne']))
 {   //installs plugin, update plugin, if needed ...
     if ( $cn->exist_schema('bilaninterne') == false )
     {
-        require_once('include/class_install_plugin.php');
         $plugin=new install_plugin($cn,$bilaninterne_version);
         $plugin->install();
     }
     elseif ( $cn->get_value('select max(val) from bilaninterne.version') < $bilaninterne_version )
     {
-        require_once('include/class_install_plugin.php');
 	$plugin = new install_plugin($cn,$bilaninterne_version);
         $plugin->upgrade();
     }
@@ -152,9 +151,9 @@ else
             echo "</TR>";
         echo "</table>";
     echo '</div>';
-    // generates the HTML output
+
     $bilaninterne->generate();
-    
+
     $output = new output_bilaninterne;
     $output->from=$bilaninterne->from;
     $output->to  =$bilaninterne->to;
