@@ -46,11 +46,11 @@ class Acc_Bilaninterne extends Acc_Bilan
     {
         parent::__construct($p_cn);
     }
-    function get_montant($variable_name,$linetype)
     /*!Reads the variable value computed from the formula description file  
      * (bilaninterne.form) and stored in the object property with name "$variable_name"
      * \return the float value stored when right line type or 0.0
      */
+    function get_montant($variable_name,$linetype)
     {
         if (($linetype ==="parent") || ($linetype==="combined"))
         {
@@ -74,7 +74,6 @@ class Acc_Bilaninterne extends Acc_Bilan
     }
     
     
-    function parse_csvtemplate($csv)
      /*! Parses the "bilaninterne.csv" description file 
       * \param $csv the handle to the csv template file  
       * \return The table data to be displayed or exported
@@ -85,6 +84,7 @@ class Acc_Bilaninterne extends Acc_Bilan
       * The table result is stored in the "bilan_table" property
      */
 
+    function parse_csvtemplate($csv)
     {        
         try
         {
@@ -128,13 +128,13 @@ class Acc_Bilaninterne extends Acc_Bilan
         }
         return;
     }
-    function get_solde($pcm_type,$solde_deb,$solde_cred)
         /*!Compute the "solde" amount of a "poste" and its sign depending on the pcmn type of the poste 
          * \param $pcm_type  : pcmn type associated with the poste 
          * \param $solde_deb 
          * \param $solde_deb
          * \return $solde 
         */
+    function get_solde($pcm_type,$solde_deb,$solde_cred)
     {
         if ($pcm_type === 'CHA' || $pcm_type === 'CHAINV' || $pcm_type === 'ACT' || $pcm_type === 'ACTINV' || $pcm_type === 'CON'){
             $solde = $solde_deb - $solde_cred;
@@ -148,12 +148,12 @@ class Acc_Bilaninterne extends Acc_Bilan
         return($solde);
 
     }
-    function get_sql_postes_range($code_left,$code_right)
     /*!Creates sql request for getting the fields of "postes" inside an interval of poste
      * \param $code_left : low poste bound
      * \param $code_left : high poste bound
      * \return sql query
      */
+    function get_sql_postes_range($code_left,$code_right)
     {
         global $g_user;
         $filter_sql=$g_user->get_ledger_sql('ALL',3);
@@ -187,7 +187,6 @@ class Acc_Bilaninterne extends Acc_Bilan
 
     }
     
-    function get_range_postes($code_left,$code_right)
     /*!generates a table of rows comptabile with bilan_table property,
      * \brief Each row is associated to a "poste" and contains usefull fields; 
      * each poste with non zero "solde" has its own row 
@@ -195,6 +194,7 @@ class Acc_Bilaninterne extends Acc_Bilan
      * \param $code_left : high poste bound
      * \return 2D array compatible with "bilan_table" property
      */
+    function get_range_postes($code_left,$code_right)
     {
         $sql=$this->get_sql_postes_range($code_left,$code_right);
         $cn=clone $this->db;
@@ -220,9 +220,9 @@ class Acc_Bilaninterne extends Acc_Bilan
         return $array;
     }
 
-    function open_check($filename)
     /*! Check file before processing
      */
+    function open_check($filename)
     {
         $file = fopen($filename, 'r');
         if ( $file == false)
@@ -232,21 +232,66 @@ class Acc_Bilaninterne extends Acc_Bilan
         }
         return $file;
     }
-    function generate()
      /*!Generates data to be output as a bilaninterne and stores it in table_bilan property
      */
+    function generate()
     {
         // Process formulas from the ".form" file, store it as object properties
-        $formulasfile =  NOALYSS_PLUGIN. '/bilan_interne/templates/bilaninterne.form';
+        $formulasfile =  BILAN_INTERNE_HOME.'/templates/bilaninterne.form';
         $formulas= $this->open_check($formulasfile); 
         $this->compute_formula($formulas);
         fclose($formulas);
         // Read, parse and filter the ".csv" template file producing an array
-        $csvfilename = NOALYSS_PLUGIN. '/bilan_interne/templates/bilaninterne.csv';
+        $csvfilename = BILAN_INTERNE_HOME.'/templates/bilaninterne.csv';
         $this->csvfilename = $csvfilename;
         $csv= $this->open_check($csvfilename);
         $this->parse_csvtemplate($csv);
         fclose($csv);
         return;
-    }     
+    } 
+ /*!
+     * \brief return a string with the form for selecting the periode and
+     * the type of bilan
+     * \param $p_filter_year filter on a year
+     *
+     * \return a string
+     */
+    function display_form($p_filter_year="")
+    {
+        $r="";
+        $r.=dossier::hidden();
+        $r.= '<TABLE>';
+
+        $r.='<TR>';
+// filter on the current year
+        $w=new ISelect();
+        $w->table=1;
+
+        $periode_start=$this->db->make_array("select p_id,to_char(p_start,'DD-MM-YYYY') from parm_periode $p_filter_year order by p_start,p_end");
+
+        $periode_end=$this->db->make_array("select p_id,to_char(p_end,'DD-MM-YYYY') from parm_periode $p_filter_year order by p_end,p_start");
+
+        $w->label=_("Depuis");
+        $w->value=$this->from;
+        $w->selected=$this->from;
+        $r.= td($w->input('from_periode',$periode_start));
+        $w->label=_(" jusque ");
+        $w->value=$this->to;
+        $w->selected=$this->to;
+        $r.= td($w->input('to_periode',$periode_end));
+        $r.= "</TR>";
+
+        $r.= '</TABLE>';
+        return $r;
+    }    
+    /*!
+     * \brief get data from the $_GET
+     *
+     */
+    function get_request_get()
+    {
+        $this->b_id=0;
+        $this->from=( isset ($_GET['from_periode']))?$_GET['from_periode']:-1;
+        $this->to=( isset ($_GET['to_periode']))?$_GET['to_periode']:-1;
+    }
 }
