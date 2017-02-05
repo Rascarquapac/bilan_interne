@@ -24,10 +24,9 @@
  * \version 0.1
  * \date 10 janvier 2017
 */
-//require_once '/Applications/Noalyss/apps/noalyss/htdocs/include/constant.php';
-require_once NOALYSS_INCLUDE.'/lib/class_database.php';
-require_once NOALYSS_INCLUDE.'/class/class_acc_bilan.php';
-require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_row_descriptor.php';
+require_once NOALYSS_INCLUDE . '/lib/class_database.php';
+require_once NOALYSS_INCLUDE . '/class/class_acc_bilan.php';
+require_once BILAN_INTERNE_HOME . '/class_row_descriptor.php';
 
 
 /*! 

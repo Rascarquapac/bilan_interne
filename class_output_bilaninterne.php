@@ -28,9 +28,8 @@
 require_once NOALYSS_INCLUDE. '/lib/class_database.php';
 require_once NOALYSS_INCLUDE. '/lib/class_noalyss_csv.php'; 
 require_once NOALYSS_INCLUDE. '/lib/class_pdf.php'; 
-require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_acc_bilaninterne.php';
-require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_output_bilaninterne.php';
 require_once NOALYSS_INCLUDE. '/class/class_periode.php';
+require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
 
 /*! 
  * \class output_bilaninterne
@@ -46,39 +45,29 @@ class output_bilaninterne
      *\param $result, the current csv line
      *\param $cn the current connection to the database
     */
-        //Current dossier reference for Javascript display feature
-        $gDossier=dossier::id();
         // Periode info for documenting ouput
         $periode   = new Periode($cn);
         $date_from = $periode->first_day($this->from);
         $date_to   = $periode->last_day($this->to);
         echo '<div class="content">';
             echo '<hr>';
-            // Display results
-
             echo "<h2 class=\"info\"> période du ".$date_from." au ".$date_to."</h2>";
             echo '<table id="t_balance" width="90%">';
                 echo '<th>Libell&eacute;</th>';
                 echo '<th>Poste Comptable</th>';
                 echo '<th>Solde</th>';
-            $i=0;
             bcscale(2);
             foreach ($result as $r){
-                //print_r($r);echo '<br>';
-                $i++;
-                //Line background
-                if ( $i%2 == 0 )
-                    $tr="even";
-                else
-                    $tr="odd";
-                //Javascript "view_history" set
-                $view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF="javascript:view_history_account(\'%s\',\'%s\')" >%s</A>',
-                                       $r['poste'], $gDossier, $r['poste']);
-
+                $view_history= HtmlInput::history_account( $r['poste'], $r['poste']);
                 if ($r['linetype'] != 'leaf'){
                     if ($r['linetype'] == 'tittle'){
-                        $tittle_style = 'style="font-weight:bold;font-size:150%;text-align:center;"';
-                        //echo $style.'<br>';
+                        $fill = "even";
+                        if ($r['linestyle'] > 0) {
+                            $tittle_style = 'style="font-weight:bold;font-size:120%;text-align:left;"';
+                        }
+                        else {
+                            $tittle_style = 'style="font-weight:bold;font-size:150%;text-align:center;"';
+                        }
                         echo '<TR >';
                             echo td($r['label'], $tittle_style);
                             echo td('','style="font-weight:bold;"');
@@ -98,8 +87,8 @@ class output_bilaninterne
                     }
                 }
                 else {
-                    echo '<TR class="'.$tr.'">';
-                        //echo td(h($justification.$decalage.$r['label']));
+                    $fill = ( $fill === "even" ) ? "odd" : "even";
+                    echo '<TR class="'.$fill.'">';
                         echo td(h($r['label']),'style="' . $indent_leaf_style . '"');
                         echo td($view_history);
                         echo td(nbm($r['solde']),'style="text-align:right;"');
@@ -109,7 +98,14 @@ class output_bilaninterne
             echo '</table>';
         echo '</div>';
     }    
-    
+    function output_pdf_row($pdf,$r,$indent_length,$width,$fill)
+    {
+        if ($indent_length != 0) {$pdf->write_cell($indent_length,$width,'',0,0,'L',$fill);}
+        $pdf->LongLine((140 - $indent_length),$width,$r['label'],0,false,'L');
+        $pdf->write_cell(25,$width,$r['poste'],0,0,'L',$fill);
+        $pdf->write_cell(25,$width,nbm($r['solde']),0,0,'R',$fill);
+        $pdf->line_new(2);
+    }
     function output_pdf($result,$cn){
     /*!Creates PDF output of the result table
      *\param $result, the current csv line
@@ -128,47 +124,49 @@ class output_bilaninterne
         $pdf->SetFont('DejaVuCond','',7);
         $pdf->setTitle("Balance interne",true);
 
-        $pdf->LongLine(140,6,'Libellé');
-        $pdf->Cell(25,6,'poste');
-        $pdf->Cell(25,6,'Montant',0,0,'R');
-        $pdf->Ln();
-
         bcscale(2);
-        $i=0;
         foreach ($result as $r){
             $pdf->SetFont('DejaVuCond','',8);
-            //Line background
-            if ( $i%2 == 0 ){
-                $pdf->SetFillColor(220,221,255);
-                $fill="even";
-            }
-            else {
-                $fill="odd";
-                $pdf->SetFillColor(255,255,255);
-            }
-            $i++;
+            $pdf->SetFillColor(255,255,255);
             if ($r['linetype'] != 'leaf'){
-                $i=0;
                 if ($r['linetype'] == 'tittle'){
                     //Tittle line
-                    $pdf->SetFont('DejaVu','B',8);
-                    $pdf->LongLine(190,6,$r['label']);
+                    $fill = "even";
+                    if ($r['linestyle'] > 0) {
+                        $pdf->SetFont('DejaVu','B',8);
+                        $pdf->LongLine(190,10,$r['label'],0,'L',$fill);
+                        $pdf->line_new(2);
+                    }
+                    else {
+                        $pdf->SetFont('DejaVu','B',10);
+                        $pdf->LongLine(190,10,$r['label'],0,'C',$fill);
+                        $pdf->line_new(2);
+                    }
                 }
                 else {
                     //BNB synthetic line
-                    $pdf->SetFont('DejaVu','BI',7);                
-                    $pdf->Cell(140,6,$r['label'],0,0,'L',0,0);
-                    $pdf->Cell(25,6,$r['poste'],0,0,'L',0);
-                    $pdf->Cell(25,6,nbm($r['solde']),0,0,'R',0);
+                    $fill = "even";
+                    $indent_step = 4;
+                    $linestyle = $r['linestyle'];
+                    $indent_depth = max(0,$linestyle-2);
+                    $indent_length = $indent_step * $indent_depth;
+                    $indent_leaf   = $indent_length + $indent_step;
+                    $pdf->SetFont('DejaVu','BI',7);  
+                    $this->output_pdf_row($pdf,$r,$indent_length,5,$fill);
                 }
             }
             else {
                 //Leaf rows building
-                $pdf->Cell(140,6,$r['label'],0,0,'L',$fill);
-                $pdf->Cell(25,6,$r['poste'],0,0,'L',$fill);
-                $pdf->Cell(25,6,nbm($r['solde']),0,0,'R',$fill);
-            }
-            $pdf->Ln();
+                if ( $fill === "even" ){
+                    $fill="odd";
+                    $pdf->SetFillColor(220,221,255);
+                }
+                else {
+                    $fill="even";
+                    $pdf->SetFillColor(255,255,255);
+                }
+                $this->output_pdf_row($pdf,$r,$indent_leaf,4,$fill);
+            }            
         }
         $fDate=date('dmy-Hi');
         $pdf->Output('bilaninterne-'.$fDate.'.pdf','D');
@@ -195,7 +193,6 @@ class output_bilaninterne
             foreach ($line_header as $key) {
                 $csv->add($row[$key],"text");
             }
-            //echo "\n";
             $csv->write();
         }
         return($r);

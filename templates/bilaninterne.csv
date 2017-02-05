@@ -79,10 +79,12 @@ Linetype,Rubrique,Code,Montant,Ventilation
 1,TOTAL DU PASSIF ,10/49,<<$S23>>,no
 ,,,,
 0,COMPTE DE RESULTATS,,,
-1,I Produits et charges d'exploitation,,,
+1,"I Produits et charges d'exploitation",,,
+1,Produits d'exploitation, 70/74,<<$S7074>>,no
 2,Chiffre d'affaires  ,70,<<$C70>>,yes
 2,Dons et subsides,73,<<$C73>>,yes
-2,Autrs produits d'exploitation,74,<<$C74>>,yes
+2,Autres produits d'exploitation,74,<<$C74>>,yes
+1,"Charges d'exploitation",60/64,<<$S6064>>,no
 2,"Approvisionnements, marchandises; ",60,<<$C60>>,yes
 2,Services et biens divers,61,<<$C61>>,yes
 2,"Approvisionnements, marchandises, services et biens divers",60/61,<<$S24>>,no
@@ -96,23 +98,28 @@ Linetype,Rubrique,Code,Montant,Ventilation
 3,H Charges d'exploitation portées à l'actif au titre de frais de restructuration (+),649,<<$C649>>,yes
 2,Bénéfice d'exploitation (+),70/64,<<$S30>>,no
 2,Perte d'exploitation (-) ,64/70 ,(<<$S31>>),no
-1,II Produits financiers ,75,<<$C75>>,yes
-1,   Charges financières (-) ,65,<<$C65>>,yes
+1,"II Produits et charges financiers",,,
+1,Produits financiers ,75,<<$C75>>,yes
+1,Charges financières (-) ,65,<<$C65>>,yes
 2,Bénéfice courant avant impôts (+),70/65,<<$S32>>,no
 2,Perte courante avant impôts (-),65/70,(<<$S33>>),no
-1,III Produits exceptionnels,76,<<$C76>>,yes
+1,III Produits et charges exceptionnels,,,
+1,Produits exceptionnels,76,<<$C76>>,yes
 1,Charges exceptionnelles (-) ,66,<<$C66>>,yes
 1,Bénéfice de l'exercice avant impôts (+),70/66,<<$S34>>,no
 1,Perte de l'exercice avant impôts (-),66/70,(<<$S35>>),no
-1,IIIbis Prélèvements sur les impôts différés (+) ,780,<<$C780>>,yes
+1,IIIbis Impôts différés,,,
+1,Prélèvements sur les impôts différés (+) ,780,<<$C780>>,yes
 1,Transferts aux impôts différés (-) ,680,(<<$C680>>),yes
-1,IV Impôts sur le résultat (-) (+) ,67/77,<<$S38>>,no
+1,IV Impôts,,,
+1,Impôts sur le résultat (-) (+) ,67/77,<<$S38>>,no
 2,Impôts sur le résultat,67,<<$C67>>,yes
 2,Régularisations d'impôts et reprises de provisions fiscales,77,<<$C77>>,yes
 1,Bénéfice de l'exercice (+) ,70/67,<<$S36>>,no
 1,Perte de l'exercice (-) ,67/70,(<<$S37>>),no
-1,V Prélèvements sur les réserves immunisées (+) ,789,<<$C789>>,yes
-1,   Transferts aux réserves immunisées (-) ,689,<<$C689>>,yes
+1,V Prélèvements et transferts,,,
+1,Prélèvements sur les réserves immunisées (+) ,789,<<$C789>>,yes
+1,Transferts aux réserves immunisées (-) ,689,<<$C689>>,yes
 1,Bénéfice de l'exercice à affecter (+),70/68,<<$S39>>,no
 1,Perte de l'exercice à affecter (-) ,68/70,(<<$S40>>),no
 0,AFFECTATIONS ET PRELEVEMENTS,,,
