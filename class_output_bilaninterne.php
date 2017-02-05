@@ -95,7 +95,8 @@ class output_bilaninterne
                     }
                 }
                 else {
-                    echo '<TR class="'.$tr.'">';
+                    $fill = ( $fill === "even" ) ? "odd" : "even";
+                    echo '<TR class="'.$fill.'">';
                         //echo td(h($justification.$decalage.$r['label']));
                         echo td(h($r['label']),'style="' . $indent_leaf_style . '"');
                         echo td($view_history);
