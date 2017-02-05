@@ -21,8 +21,9 @@
 /*!\file
  * \brief raw file for PDF ewa
  */
-require_once NOALYSS_INCLUDE.'/ext/bilan_interne/class_acc_bilaninterne.php';
-require_once NOALYSS_INCLUDE. '/ext/bilan_interne/class_output_bilaninterne.php';
+include 'bilaninterne_constant.php';
+require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
+require_once BILAN_INTERNE_HOME . '/class_output_bilaninterne.php';
 
 
 extract($_REQUEST);
