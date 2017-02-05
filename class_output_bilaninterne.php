@@ -46,8 +46,6 @@ class output_bilaninterne
      *\param $result, the current csv line
      *\param $cn the current connection to the database
     */
-        //Current dossier reference for Javascript display feature
-        $gDossier=dossier::id();
         // Periode info for documenting ouput
         $periode   = new Periode($cn);
         $date_from = $periode->first_day($this->from);
@@ -63,9 +61,7 @@ class output_bilaninterne
                 echo '<th>Solde</th>';
             bcscale(2);
             foreach ($result as $r){
-                $view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF="javascript:view_history_account(\'%s\',\'%s\')" >%s</A>',
-                                       $r['poste'], $gDossier, $r['poste']);
-
+                $view_history= HtmlInput::history_account( $r['poste'], $r['poste']);
                 if ($r['linetype'] != 'leaf'){
                     if ($r['linetype'] == 'tittle'){
                         $fill = "even";
