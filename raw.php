@@ -26,7 +26,7 @@ require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
 require_once BILAN_INTERNE_HOME . '/class_output_bilaninterne.php';
 
 
-extract($_REQUEST);
+extract($_REQUEST, EXTR_SKIP);
 $cn=Dossier::connect();
 $bilaninterne=new Acc_Bilaninterne($cn);
 $bilaninterne->from =$from_periode;
