@@ -32,6 +32,12 @@
         <code>
             BILANINTERNE
         </code>
+        <depend>
+            PRINT
+        </depend>
+        <order>
+            950
+        </order>
         <root>
             bilan_interne
         </root>
