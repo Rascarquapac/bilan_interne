@@ -32,9 +32,9 @@
 if ( ! defined ('ALLOWED') ) {die('Appel direct non permis');}
 require_once 'bilaninterne_constant.php';
 require_once NOALYSS_INCLUDE . '/class/class_exercice.php';
-require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
-require_once BILAN_INTERNE_HOME . '/class_output_bilaninterne.php';
-require_once BILAN_INTERNE_HOME . '/include/class_install_plugin.php';
+require_once BILAN_INTERNE_HOME . '/acc_bilaninterne.class.php';
+require_once BILAN_INTERNE_HOME . '/output_bilaninterne.class.php';
+require_once BILAN_INTERNE_HOME . '/include/install_plugin.class.php';
    
 global $g_user;
 global $cn;

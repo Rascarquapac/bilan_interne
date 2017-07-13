@@ -29,7 +29,7 @@ require_once NOALYSS_INCLUDE. '/lib/class_database.php';
 require_once NOALYSS_INCLUDE. '/lib/class_noalyss_csv.php'; 
 require_once NOALYSS_INCLUDE. '/lib/class_pdf.php'; 
 require_once NOALYSS_INCLUDE. '/class/class_periode.php';
-require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
+require_once BILAN_INTERNE_HOME . '/acc_bilaninterne.class.php';
 
 /*! 
  * \class output_bilaninterne

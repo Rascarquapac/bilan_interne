@@ -22,8 +22,8 @@
  * \brief raw file for PDF ewa
  */
 include 'bilaninterne_constant.php';
-require_once BILAN_INTERNE_HOME . '/class_acc_bilaninterne.php';
-require_once BILAN_INTERNE_HOME . '/class_output_bilaninterne.php';
+require_once BILAN_INTERNE_HOME . '/acc_bilaninterne.class.php';
+require_once BILAN_INTERNE_HOME . '/output_bilaninterne.class.php';
 
 
 extract($_REQUEST, EXTR_SKIP);

@@ -26,7 +26,7 @@
 */
 require_once NOALYSS_INCLUDE . '/lib/class_database.php';
 require_once NOALYSS_INCLUDE . '/class/class_acc_bilan.php';
-require_once BILAN_INTERNE_HOME . '/class_row_descriptor.php';
+require_once BILAN_INTERNE_HOME . '/row_descriptor.class.php';
 
 
 /*! 
