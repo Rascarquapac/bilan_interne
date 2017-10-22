@@ -25,10 +25,10 @@
  * \date 10 janvier 201
 */
 
-require_once NOALYSS_INCLUDE. '/lib/class_database.php';
-require_once NOALYSS_INCLUDE. '/lib/class_noalyss_csv.php'; 
-require_once NOALYSS_INCLUDE. '/lib/class_pdf.php'; 
-require_once NOALYSS_INCLUDE. '/class/class_periode.php';
+require_once NOALYSS_INCLUDE. '/lib/database.class.php';
+require_once NOALYSS_INCLUDE. '/lib/noalyss_csv.class.php'; 
+require_once NOALYSS_INCLUDE. '/lib/pdf.class.php'; 
+require_once NOALYSS_INCLUDE. '/class/periode.class.php';
 require_once BILAN_INTERNE_HOME . '/acc_bilaninterne.class.php';
 
 /*! 

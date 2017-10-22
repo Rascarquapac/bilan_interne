@@ -27,7 +27,7 @@
  * \version 0.1
  * \date 10 janvier 2017
 */
-require_once NOALYSS_INCLUDE.'/database/class_menu_ref_sql.php';
+require_once NOALYSS_INCLUDE.'/database/menu_ref_sql.class.php';
 
 class Install_Plugin extends Menu_Ref_SQL
 {
