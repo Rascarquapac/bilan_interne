@@ -48,7 +48,10 @@
             Thierry Nancy
         </author>
         <noalyss_version>
-            6920
+            7000
         </noalyss_version>
+        <version>
+         5
+        </version>
     </plugin>
 </plugins>    

@@ -58,7 +58,7 @@ class output_bilaninterne
                 echo '<th>Solde</th>';
             bcscale(2);
             foreach ($result as $r){
-                $view_history= HtmlInput::history_account( $r['poste'], $r['poste']);
+                $view_history= HtmlInput::history_account( $r['poste'], $r['poste'],"",$periode->get_exercice($this->from));
                 if ($r['linetype'] != 'leaf'){
                     if ($r['linetype'] == 'tittle'){
                         $fill = "even";
