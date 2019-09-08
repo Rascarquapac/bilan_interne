@@ -124,7 +124,7 @@ class Acc_Bilaninterne extends Acc_Bilan
             }
         }
         catch (Exception $exc) {
-            echo 'Erreur dans le fichier '.$this->csvfilename.' en ligne '.$line_num.' : '.$exc->getMessage();
+            printf(_('Erreur dans le fichier %s ligne %s : %s'),$this->csvfilename,$line_num,$exc->getMessage());
         }
         return;
     }
@@ -167,9 +167,9 @@ class Acc_Bilaninterne extends Acc_Bilan
         $jrn ="";
         $and ="";
         //from_poste and to_poste complement queries
-        $from_poste = " $and j_poste::text >= '".$from."'";
+        $from_poste = " $and j_poste::text >= '".sql_string($from)."'";
         $and =" and ";
-        $to_poste   = " $and j_poste::text < '".$to."'";//TN "<=" -> "<"
+        $to_poste   = " $and j_poste::text < '".sql_string($to)."'";//TN "<=" -> "<"
         $and=" and ";
         $sql="select j_poste as poste, pcm_type, sum(deb) as sum_deb, sum(cred) as sum_cred from
               ( select j_poste, pcm_type,
