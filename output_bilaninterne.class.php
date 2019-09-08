@@ -180,21 +180,21 @@ class output_bilaninterne
         $periode=new Periode($cn);
         $date_limit_start = $periode->first_day($this->from);
         $date_limit_end   = $periode->last_day($this->to);
-        $per_text="Bilan interne du ".$date_limit_start." au ".$date_limit_end;
+        $per_text=sprintf(_("Bilan interne du %s au %s"),$date_limit_start,$date_limit_end);
         
         $csv = new Noalyss_Csv("bilaninterne");
         $csv->send_header();
         $line_header =  array('','',$per_text,'','');
         $csv->write_header($line_header);
-        $line_header =  array('linetype','linestyle','label','poste','solde');
+        $line_header =  array('linetype','linestyle','label','poste');
         $csv->write_header($line_header);
         $r = "";
         foreach ($result as $row) {
             foreach ($line_header as $key) {
                 $csv->add($row[$key],"text");
             }
+            $csv->add($row['solde'],'number');
             $csv->write();
         }
-        return($r);
     }
 }
