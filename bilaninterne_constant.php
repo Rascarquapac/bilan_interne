@@ -10,7 +10,7 @@
  */
 
 if ( !defined("BILAN_INTERNE_HOME")) define ("BILAN_INTERNE_HOME",__DIR__);
-require_once NOALYSS_INCLUDE .'/lib/database.class.php';
+require_once NOALYSS_INCLUDE .'/class/database.class.php';
 
 global $cn,$errcode;
 

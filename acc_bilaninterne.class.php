@@ -24,7 +24,7 @@
  * \version 0.1
  * \date 10 janvier 2017
 */
-require_once NOALYSS_INCLUDE . '/lib/database.class.php';
+require_once NOALYSS_INCLUDE . '/class/database.class.php';
 require_once NOALYSS_INCLUDE . '/class/acc_bilan.class.php';
 require_once BILAN_INTERNE_HOME . '/row_descriptor.class.php';
 

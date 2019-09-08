@@ -38,7 +38,7 @@ require_once BILAN_INTERNE_HOME . '/include/install_plugin.class.php';
    
 global $g_user;
 global $cn;
-$cn=Dossier::connect();;
+$cn=Dossier::connect();
 
 /*! Builds the form dedicated to the exercice selection 
  * \param $exercice The current exercice
