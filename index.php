@@ -40,7 +40,7 @@ global $g_user;
 global $cn;
 $cn=Dossier::connect();
 
-/*! Builds the form dedicated to the exercice selection 
+/*! Builds the form dedicated to the exercice selection
  * \param $exercice The current exercice
  * \return The resulting HTML form
  */
@@ -110,7 +110,7 @@ function print_submit_button()
     return(HtmlInput::button_anchor(_('Imprimer'), "", 'export_id', 'onclick="window.print();"', 'smallbutton'));
 }
 
-$bilaninterne_version = 6960;
+$bilaninterne_version = 6961;
 $bilaninterne=new Acc_Bilaninterne($cn);
 //Exercice and Period selection forms
 echo '<div class="content">';

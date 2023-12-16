@@ -236,17 +236,40 @@ class Acc_Bilaninterne extends Acc_Bilan
      */
     function generate()
     {
+
+        global $cn;
         // Process formulas from the ".form" file, store it as object properties
         $formulasfile =  BILAN_INTERNE_HOME.'/templates/bilaninterne.form';
-        $formulas= $this->open_check($formulasfile); 
+        $formulas= $this->open_check($formulasfile);
+
+        // Mother class, is not using periode_id but date
+        // save the periode id value and replace them by date
+        $save=array($this->from,$this->to);
+        $periode=new \Periode($cn);
+        $date_start=$periode->get_date_limit($this->from)['p_start'];
+        $date_end=$periode->get_date_limit($this->to)['p_end'];
+
+        $this->from=$date_start;
+        $this->to=$date_end;
+
         $this->compute_formula($formulas);
+
+
         fclose($formulas);
+
+        // Mother class, is not using periode_id but date
+        // restore the periode id value
+        $this->from=$save[0];
+        $this->to=$save[1];
+
         // Read, parse and filter the ".csv" template file producing an array
         $csvfilename = BILAN_INTERNE_HOME.'/templates/bilaninterne.csv';
         $this->csvfilename = $csvfilename;
         $csv= $this->open_check($csvfilename);
         $this->parse_csvtemplate($csv);
+
         fclose($csv);
+
         return;
     } 
  /*!
