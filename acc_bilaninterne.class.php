@@ -237,7 +237,7 @@ class Acc_Bilaninterne extends Acc_Bilan
     function generate()
     {
 
-        global $cn;
+        global $cn,$g_parameter;
         // Process formulas from the ".form" file, store it as object properties
         $formulasfile =  BILAN_INTERNE_HOME.'/templates/bilaninterne.form';
         $formulas= $this->open_check($formulasfile);
@@ -245,12 +245,15 @@ class Acc_Bilaninterne extends Acc_Bilan
         // Mother class, is not using periode_id but date
         // save the periode id value and replace them by date
         $save=array($this->from,$this->to);
-        $periode=new \Periode($cn);
-        $date_start=$periode->get_date_limit($this->from)['p_start'];
-        $date_end=$periode->get_date_limit($this->to)['p_end'];
+        if ( $g_parameter->MY_REPORT=='N')
+        {
+            $periode=new \Periode($cn);
+            $date_start=$periode->get_date_limit($this->from)['p_start'];
+            $date_end=$periode->get_date_limit($this->to)['p_end'];
+            $this->from=$date_start;
+            $this->to=$date_end;
 
-        $this->from=$date_start;
-        $this->to=$date_end;
+        }
 
         $this->compute_formula($formulas);
 
