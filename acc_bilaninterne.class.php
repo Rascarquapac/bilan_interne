@@ -293,21 +293,28 @@ class Acc_Bilaninterne extends Acc_Bilan
         $w=new ISelect();
         $w->table=1;
 
+        $min_periode=$this->db->get_value("select p_id from parm_periode $p_filter_year order by p_start limit 1");
+        $max_periode=$this->db->get_value("select p_id from parm_periode $p_filter_year order by p_start desc limit 1");
         $periode_start=$this->db->make_array("select p_id,to_char(p_start,'DD-MM-YYYY') from parm_periode $p_filter_year order by p_start,p_end");
 
         $periode_end=$this->db->make_array("select p_id,to_char(p_end,'DD-MM-YYYY') from parm_periode $p_filter_year order by p_end,p_start");
-
+        $this->from = ( $this->from == -1 || empty($this->from)) ? $min_periode:$this->from;
         $w->label=_("Depuis");
         $w->value=$this->from;
         $w->selected=$this->from;
+
         $r.= td($w->input('from_periode',$periode_start));
         $w->label=_(" jusque ");
+        $this->to=( $this->to == -1 || empty($this->to) ) ? $max_periode : $this->to;
+
         $w->value=$this->to;
+
         $w->selected=$this->to;
         $r.= td($w->input('to_periode',$periode_end));
         $r.= "</TR>";
 
         $r.= '</TABLE>';
+        
         return $r;
     }    
     /*!
@@ -317,6 +324,7 @@ class Acc_Bilaninterne extends Acc_Bilan
     function get_request_get()
     {
         $this->b_id=0;
+
         $this->from=( isset ($_GET['from_periode']))?$_GET['from_periode']:-1;
         $this->to=( isset ($_GET['to_periode']))?$_GET['to_periode']:-1;
     }

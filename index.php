@@ -29,6 +29,9 @@
  * \version 0.1
  * \date 10 janvier 2017
  */
+
+
+
 if ( ! defined ('ALLOWED') ) {die('Appel direct non permis');}
 require_once 'bilaninterne_constant.php';
 require_once NOALYSS_INCLUDE . '/class/exercice.class.php';
@@ -40,7 +43,8 @@ global $g_user;
 global $cn;
 $cn=Dossier::connect();
 
-/*! Builds the form dedicated to the exercice selection
+/*!
+ * \brief  Builds the form dedicated to the exercice selection
  * \param $exercice The current exercice
  * \return The resulting HTML form
  */
@@ -61,7 +65,8 @@ function exercice_selection_form($exercice)
     $form .= '</fieldset>';
     return ($form);
  }    
-/*!Builds the form dedicated to periods selection 
+/*!
+    \brief Builds the form dedicated to periods selection
  * \param $bilan The bilan object and the selected exercice
  * \param $cn The exercice to be processed object and the selected exercice
  * \return The resulting HTML form
