@@ -31,6 +31,8 @@ require_once NOALYSS_INCLUDE.'/database/menu_ref_sql.class.php';
 
 class Install_Plugin extends Menu_Ref_SQL
 {
+    public $cn; //!< $cn (Object Database) 
+    public $version ; //!< $version (int) version schema
     function __construct($p_cn,$version){
         $this->cn = $p_cn;
         $this->version = $version;
